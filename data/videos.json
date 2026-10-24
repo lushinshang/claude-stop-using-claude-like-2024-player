@@ -1,0 +1,20 @@
+[
+  {
+    "id": "claude-2024",
+    "name": "Claude 工程主管：別再用 2024 年的方式使用 Claude",
+    "title": "Claude 工程主管：別再用 2024 年的方式使用 Claude（中英雙語字幕）",
+    "subtitle": "訪談來賓：Felix Riesberg（Anthropic Claude 工程團隊負責人）／主持：Silicon Valley Girl",
+    "ytId": "D-SVFneJ_Nk",
+    "cuesFile": "data/claude-2024.json",
+    "note": "本網頁僅供個人技術學習、研究與語言交流之用。影片直接嵌入自 YouTube 官方來源，完整版權歸原創頻道 <strong>Silicon Valley Girl（Marina Mogilko）</strong> 及 <strong>Anthropic</strong> 團隊所有。<br>本站僅就原影片內容整理並製作繁體中文翻譯字幕，與影片進行時間軸同步疊加呈現，以利中文社群交流學習。如翻譯有未臻完善之處，誠摯歡迎各界前輩指教；若您喜歡這部訪談，誠摯推薦前往 <a href=\"https://www.youtube.com/watch?v=D-SVFneJ_Nk\" target=\"_blank\" rel=\"noopener noreferrer\">YouTube 原始影片</a> 按讚、留言並訂閱原作者頻道，支持高品質的創作者！"
+  },
+  {
+    "id": "nvidia-gtc-2026",
+    "name": "NVIDIA GTC Berlin 2026 Keynote（黃仁勳主題演講）",
+    "title": "NVIDIA GTC Berlin 2026 Keynote With CEO Jensen Huang（中英雙語字幕）",
+    "subtitle": "主講人：黃仁勳（NVIDIA 執行長）",
+    "ytId": "PvFjbPYEOZI",
+    "cuesFile": "data/nvidia-gtc-2026.json",
+    "note": "本網頁僅供個人技術學習、研究與語言交流之用。影片直接嵌入自 YouTube 官方來源，完整版權歸原創頻道 <strong>NVIDIA</strong> 所有。<br>本站僅就原影片內容整理並製作繁體中文翻譯字幕，與影片進行時間軸同步疊加呈現，以利中文社群交流學習。若有翻譯疏漏之處，誠摯歡迎各界指教；亦誠摯推薦前往 <a href=\"https://www.youtube.com/watch?v=PvFjbPYEOZI\" target=\"_blank\" rel=\"noopener noreferrer\">YouTube 原始影片</a> 觀看完整內容。"
+  }
+]
