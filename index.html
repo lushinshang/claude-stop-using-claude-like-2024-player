@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Claude 工程主管：別再用 2024 年的方式使用 Claude（中英雙語字幕）</title>
 <style>
 :root {
@@ -59,6 +59,7 @@ h1 {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  transition: all 0.2s ease;
 }
 .player-container iframe, .player-container #yt {
   position: absolute;
@@ -68,45 +69,70 @@ h1 {
   border: 0;
 }
 
-/* 懸浮字幕層：預設在一般模式不顯示，全螢幕時浮現於底部 */
+/* 退出全螢幕按鈕（懸浮在右上角） */
+.fs-exit-btn {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2147483647;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.fs-exit-btn:hover {
+  background: rgba(217, 119, 87, 0.85);
+  border-color: #fff;
+}
+
+/* 懸浮字幕層 */
 .overlay-sub {
   display: none;
   position: absolute;
-  bottom: 32px;
+  bottom: clamp(14px, 3.5vw, 32px);
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: 92%;
   max-width: 1100px;
   text-align: center;
   pointer-events: none;
-  z-index: 2147483647;
+  z-index: 2147483646;
 }
 .overlay-sub-box {
   display: inline-block;
-  background: rgba(0, 0, 0, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 8px 18px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
 }
 .overlay-sub .ov-zh {
-  font-size: clamp(1.25rem, 2.8vw, 2.1rem);
+  font-size: clamp(1.15rem, 3.4vw, 2.1rem);
   font-weight: 700;
   line-height: 1.4;
   color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 .overlay-sub .ov-en {
-  font-size: clamp(0.95rem, 2vw, 1.45rem);
-  color: #e0e0e0;
-  margin-top: 6px;
+  font-size: clamp(0.9rem, 2.4vw, 1.45rem);
+  color: #e5e5e5;
+  margin-top: 5px;
   line-height: 1.35;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
-/* 全螢幕樣式（支援 :fullscreen 標準與 WebKit） */
+/* 1. 原生全螢幕模式（桌機、支援的 Android） */
 .player-container:fullscreen {
   width: 100vw;
   height: 100vh;
@@ -122,6 +148,30 @@ h1 {
 .player-container:fullscreen .overlay-sub,
 .player-container:-webkit-full-screen .overlay-sub {
   display: block;
+}
+.player-container:fullscreen .fs-exit-btn,
+.player-container:-webkit-full-screen .fs-exit-btn {
+  display: block;
+}
+
+/* 2. 視窗滿版全螢幕模式（100% 相容 iOS Safari / iPhone / 所有行動瀏覽器） */
+.player-container.is-web-fs {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  z-index: 9999999 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  aspect-ratio: unset !important;
+}
+.player-container.is-web-fs .overlay-sub {
+  display: block !important;
+}
+.player-container.is-web-fs .fs-exit-btn {
+  display: block !important;
 }
 
 /* 一般模式下的卡片式字幕 */
@@ -238,6 +288,7 @@ button[aria-pressed=true] {
 
 <div class="player-container" id="player-box">
   <div id="yt"></div>
+  <button class="fs-exit-btn" id="fs-close" title="退出全螢幕">✕ 退出全螢幕</button>
   <div class="overlay-sub" id="overlay-sub">
     <div class="overlay-sub-box" id="ov-box">
       <div class="ov-zh" id="ov-zh"></div>
@@ -254,7 +305,7 @@ button[aria-pressed=true] {
 <div class="bar">
   <button id="tz" aria-pressed="true">中文</button>
   <button id="te" aria-pressed="true">English</button>
-  <button id="fs" aria-pressed="false" title="開啟全螢幕雙語字幕">⛶ 全螢幕字幕</button>
+  <button id="fs" aria-pressed="false" title="開啟全螢幕雙語字幕（手機建議轉橫屏體驗更佳）">⛶ 全螢幕字幕</button>
   <button id="tl" aria-pressed="false">字幕清單</button>
   <select id="sp" aria-label="播放速度">
     <option>0.75</option>
@@ -357,36 +408,82 @@ $("te").onclick = () => {
   $("te").setAttribute("aria-pressed", !h);
 };
 
-// 全螢幕切換
+// 全平台全螢幕切換（相容 iOS Safari、iPhone、iPad、Android 與桌機）
 const pBox = $("player-box");
 const fsBtn = $("fs");
+const fsCloseBtn = $("fs-close");
 
-function toggleFullscreen() {
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    if (pBox.requestFullscreen) {
-      pBox.requestFullscreen();
-    } else if (pBox.webkitRequestFullscreen) {
-      pBox.webkitRequestFullscreen();
+// iPhone/iPod 或不支援原生 div 全螢幕的環境
+const isIPhoneOrNoDivFs = /iPhone|iPod/i.test(navigator.userAgent) || !(pBox.requestFullscreen || pBox.webkitRequestFullscreen);
+
+function isFullscreenActive() {
+  return pBox.classList.contains("is-web-fs") || !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+
+function enterFs() {
+  if (!isIPhoneOrNoDivFs && (pBox.requestFullscreen || pBox.webkitRequestFullscreen)) {
+    try {
+      const req = pBox.requestFullscreen ? pBox.requestFullscreen() : pBox.webkitRequestFullscreen();
+      if (req && req.catch) {
+        req.catch(() => enterWebFs());
+      }
+    } catch (e) {
+      enterWebFs();
     }
   } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
+    enterWebFs();
   }
 }
 
-fsBtn.onclick = toggleFullscreen;
+function enterWebFs() {
+  pBox.classList.add("is-web-fs");
+  document.body.style.overflow = "hidden";
+  updateFsUI(true);
+}
 
-function updateFsState() {
-  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+function exitFs() {
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    try {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    } catch (e) {}
+  }
+  if (pBox.classList.contains("is-web-fs")) {
+    pBox.classList.remove("is-web-fs");
+    document.body.style.overflow = "";
+  }
+  updateFsUI(false);
+}
+
+function updateFsUI(isFs) {
   fsBtn.setAttribute("aria-pressed", isFs);
   fsBtn.textContent = isFs ? "縮小螢幕" : "⛶ 全螢幕字幕";
 }
 
-document.addEventListener("fullscreenchange", updateFsState);
-document.addEventListener("webkitfullscreenchange", updateFsState);
+fsBtn.onclick = () => {
+  if (isFullscreenActive()) {
+    exitFs();
+  } else {
+    enterFs();
+  }
+};
+
+fsCloseBtn.onclick = (e) => {
+  e.stopPropagation();
+  exitFs();
+};
+
+function onNativeFsChange() {
+  const isNative = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  if (!isNative && !pBox.classList.contains("is-web-fs")) {
+    updateFsUI(false);
+  } else if (isNative) {
+    updateFsUI(true);
+  }
+}
+
+document.addEventListener("fullscreenchange", onNativeFsChange);
+document.addEventListener("webkitfullscreenchange", onNativeFsChange);
 
 $("sp").onchange = e => p && p.setPlaybackRate(+e.target.value);
 
