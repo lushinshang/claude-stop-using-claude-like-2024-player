@@ -25,5 +25,23 @@
     "ytId": "D-SVFneJ_Nk",
     "cuesFile": "data/claude-engineering-lead-stop-usi.json",
     "note": "本影片嵌入自 YouTube 官方來源（ID: D-SVFneJ_Nk），字幕為中英雙語同步呈現。"
+  },
+  {
+    "id": "agentic-engineering-5-terms-ever",
+    "name": "Agentic Engineering： 5 Terms Every AI Developer Should Know",
+    "title": "Agentic Engineering： 5 Terms Every AI Developer Should Know（中英雙語字幕）",
+    "subtitle": "",
+    "ytId": "SIZsFGvtClM",
+    "cuesFile": "data/agentic-engineering-5-terms-ever.json",
+    "note": "本影片嵌入自 YouTube 官方來源（ID: SIZsFGvtClM），字幕為中英雙語同步呈現。"
+  },
+  {
+    "id": "multimodal-agentic-workflow",
+    "name": "Multimodal Agentic Workflow",
+    "title": "Multimodal Agentic Workflow（中英雙語字幕）",
+    "subtitle": "",
+    "ytId": "YGg6uQPqh68",
+    "cuesFile": "data/multimodal-agentic-workflow.json",
+    "note": "本影片嵌入自 YouTube 官方來源（ID: YGg6uQPqh68），字幕為中英雙語同步呈現。"
   }
 ]
